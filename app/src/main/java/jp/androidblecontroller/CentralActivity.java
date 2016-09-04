@@ -162,8 +162,12 @@ public class CentralActivity extends FragmentActivity implements IBleActivity{
                         // Characteristic の Notificationを有効化する.
                         BluetoothGattDescriptor bleDescriptor = bleCharacteristic.getDescriptor(
                                 UUID.fromString(getString(R.string.uuid_characteristic_config)));
-                        bleDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                        bleGatt.writeDescriptor(bleDescriptor);
+
+                        // Notification 未実装の為 nullが返ってくる
+                        if (bleDescriptor != null) {
+                            bleDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                            bleGatt.writeDescriptor(bleDescriptor);
+                        }
                         // 接続が完了したらデータ送信を開始する.
                         isBleEnabled = true;
                     }
