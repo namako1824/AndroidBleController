@@ -52,4 +52,31 @@
         android:layout_toEndOf="@+id/received_value_view"
         android:layout_marginStart="71dp"
         android:layout_alignBottom="@+id/send_value_view" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarRed"
+        android:max="255"
+        android:layout_below="@+id/auto_toggle"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="57dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarGreen"
+        android:max="255"
+        android:layout_below="@+id/seekBarRed"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="55dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarBlue"
+        android:max="255"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

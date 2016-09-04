@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,39 @@ public class CentralActivity extends FragmentActivity implements IBleActivity{
     private TextView receivedValueView;
     private TextView sendValueView;
 
+
+    enum LedColor {
+        LED_COLOR_R,
+        LED_COLOR_G,
+        LED_COLOR_B
+    }
+
+    private SeekBar sliderR;
+    private SeekBar sliderG;
+    private SeekBar sliderB;
+
+    class BrightnessSlider implements SeekBar.OnSeekBarChangeListener {
+        private LedColor targetLed;
+        BrightnessSlider(LedColor target) {
+            targetLed = target;
+        }
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            //TODO:impl
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            //TODO:impl
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            //TODO:impl
+
+        }
+    }
+
     // 乱数送信用.
     private Random random = new Random();
     private Timer timer;
@@ -75,6 +109,14 @@ public class CentralActivity extends FragmentActivity implements IBleActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_central);
 
+        sliderR = (SeekBar)findViewById(R.id.seekBarRed);
+        sliderG = (SeekBar)findViewById(R.id.seekBarGreen);
+        sliderB = (SeekBar)findViewById(R.id.seekBarBlue);
+
+        sliderR.setOnSeekBarChangeListener(new BrightnessSlider(LedColor.LED_COLOR_R));
+        sliderG.setOnSeekBarChangeListener(new BrightnessSlider(LedColor.LED_COLOR_G));
+        sliderB.setOnSeekBarChangeListener(new BrightnessSlider(LedColor.LED_COLOR_B));
+
         isBleEnabled = false;
 
         // Writeリクエストで送信する値、Notificationで受け取った値をセットするTextView.
@@ -85,16 +127,20 @@ public class CentralActivity extends FragmentActivity implements IBleActivity{
         bleManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bleAdapter = bleManager.getAdapter();
 
+        /*
         // Writeリクエスト用のタイマーをセット.
         timer = new Timer();
         sendDataTimer = new SendDataTimer();
         // 第二引数:最初の処理までのミリ秒 第三引数:以降の処理実行の間隔(ミリ秒).
         timer.schedule(sendDataTimer, 500, 1000);
+        */
 
         Button sendButton = (Button) findViewById(R.id.send_button);
         sendButton.setOnClickListener((View v) ->{
             if(isBleEnabled){
-                bleCharacteristic.setValue(((EditText) findViewById(R.id.input_area)).getText().toString());
+                //bleCharacteristic.setValue(((EditText) findViewById(R.id.input_area)).getText().toString());
+                byte values[] = {(byte)sliderR.getProgress(), (byte)sliderG.getProgress(), (byte)sliderB.getProgress(), 0, 0};
+                bleCharacteristic.setValue(values);
                 bleGatt.writeCharacteristic(bleCharacteristic);
             }
         });
