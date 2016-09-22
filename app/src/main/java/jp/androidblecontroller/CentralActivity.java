@@ -140,6 +140,9 @@ public class CentralActivity extends FragmentActivity implements IBleActivity{
             if(isBleEnabled){
                 //bleCharacteristic.setValue(((EditText) findViewById(R.id.input_area)).getText().toString());
                 byte values[] = {(byte)sliderR.getProgress(), (byte)sliderG.getProgress(), (byte)sliderB.getProgress(), 0, 0};
+                float average = (values[0] / 255.0f + values[1] / 255.0f + values[2] / 255.0f) / 3;
+                values[3] = (byte)((int)(average * 10) + 1 % 10);
+
                 bleCharacteristic.setValue(values);
                 bleGatt.writeCharacteristic(bleCharacteristic);
             }
@@ -238,7 +241,7 @@ public class CentralActivity extends FragmentActivity implements IBleActivity{
             locationAccesser.checkIsGpsOn(this, this);
         }
         // OS ver.5.0以上ならBluetoothLeScannerを使用する.
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             this.startScanByBleScanner();
         }
         else{
